@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore.txt" />
+  </Folder>
+  <Project Path="ClassLibrary1/PIMS.Application.csproj" Id="6a6bc850-4113-4aba-8b3d-ca621787fafd" />
+  <Project Path="ClassLibrary2/PIMS.Domain.csproj" Id="8abd7e28-3ee1-4c0e-afa9-246772235925" />
+  <Project Path="PIMS.Infrastructure/PIMS.Infrastructure.csproj" Id="8b2979ef-b662-455c-8fc0-feb97df42344" />
+  <Project Path="PIMS.Persistence/PIMS.Persistence.csproj" Id="fb24ce37-dc47-4e82-b45e-778f4267678e" />
+  <Project Path="PIMS.Test/PIMS.Test.csproj" Id="b7766357-0002-44f7-9980-470b7e0fdb50" />
+  <Project Path="ProductInventoryManagementSystem/PIMS.API.csproj" />
+</Solution>

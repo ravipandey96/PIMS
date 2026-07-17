@@ -1,0 +1,25 @@
+# Build
+bin/
+obj/
+
+# Visual Studio
+.vs/
+
+# Rider
+.idea/
+
+# User-specific files
+*.user
+*.suo
+
+# Logs
+*.log
+
+# Test Results
+TestResults/
+
+# Publish
+publish/
+
+# NuGet packages (if stored locally)
+packages/
