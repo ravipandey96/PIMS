@@ -22,6 +22,15 @@
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary1\PIMS.Application.csproj" />
     <ProjectReference Include="..\ClassLibrary2\PIMS.Domain.csproj" />
+    <ProjectReference Include="..\PIMS.Application\PIMS.Application.csproj" />
+    <ProjectReference Include="..\PIMS.Domain\PIMS.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Context\" />
+    <Folder Include="Configurations\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Seed\" />
   </ItemGroup>
 
 </Project>
