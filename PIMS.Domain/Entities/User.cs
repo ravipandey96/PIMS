@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace PIMS.Domain.Entities;
 
-namespace PIMS.Domain.Entities
+public class User
 {
-    internal class User
-    {
-    }
 }
