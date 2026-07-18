@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Docs/" />
+  <Folder Name="/Docs/DatabaseDesign/">
+    <File Path="DatabaseDesign.md" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore.txt" />
   </Folder>

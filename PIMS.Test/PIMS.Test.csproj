@@ -21,6 +21,8 @@
     <ProjectReference Include="..\ClassLibrary2\PIMS.Domain.csproj" />
     <ProjectReference Include="..\PIMS.Application\PIMS.Application.csproj" />
     <ProjectReference Include="..\PIMS.Domain\PIMS.Domain.csproj" />
+    <ProjectReference Include="..\PIMS.Infrastructure\PIMS.Infrastructure.csproj" />
+    <ProjectReference Include="..\PIMS.Persistence\PIMS.Persistence.csproj" />
     <ProjectReference Include="..\ProductInventoryManagementSystem\PIMS.API.csproj" />
   </ItemGroup>
 
