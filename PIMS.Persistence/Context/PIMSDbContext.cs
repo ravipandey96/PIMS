@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PIMS.Domain.Common;
 using PIMS.Domain.Entities;
 
 namespace PIMS.Persistence.Context;
@@ -63,5 +64,42 @@ public class PimsDbContext : DbContext
         // Automatically apply all IEntityTypeConfiguration<T>
         // classes from this assembly.
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PimsDbContext).Assembly);
+    }
+
+    /// <summary>
+    /// Saves all changes made in this context and automatically updates audit fields.
+    /// </summary>
+    /// <param name="cancellationToken">
+    /// A cancellation token.
+    /// </param>
+    /// <returns>
+    /// The number of state entries written to the database.
+    /// </returns>
+    public override async Task<int> SaveChangesAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var entries = ChangeTracker.Entries<AuditableEntity>();
+
+        foreach (var entry in entries)
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+
+                    entry.Entity.CreatedOnUtc = DateTime.UtcNow;
+                    entry.Entity.CreatedBy = "System";
+
+                    break;
+
+                case EntityState.Modified:
+
+                    entry.Entity.LastModifiedOnUtc = DateTime.UtcNow;
+                    entry.Entity.LastModifiedBy = "System";
+
+                    break;
+            }
+        }
+
+        return await base.SaveChangesAsync(cancellationToken);
     }
 }
