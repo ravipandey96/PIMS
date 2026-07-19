@@ -45,15 +45,29 @@ public class InventoryTransactionConfiguration : IEntityTypeConfiguration<Invent
         builder.Property(it => it.Reason)
                .HasMaxLength(500);
 
+        // =========================
         // Audit Fields
-        builder.Property(it => it.CreatedOn)
+        // =========================
+
+        builder.Property(it => it.CreatedOnUtc)
                .IsRequired();
 
-        builder.Property(it => it.CreatedBy);
+        builder.Property(it => it.CreatedBy)
+               .IsRequired()
+               .HasMaxLength(100);
 
-        builder.Property(it => it.ModifiedOn);
+        builder.Property(it => it.LastModifiedOnUtc);
 
-        builder.Property(it => it.ModifiedBy);
+        builder.Property(it => it.LastModifiedBy)
+               .HasMaxLength(100);
+
+        builder.Property(it => it.IsDeleted)
+               .HasDefaultValue(false);
+
+        builder.Property(it => it.DeletedOnUtc);
+
+        builder.Property(it => it.DeletedBy)
+               .HasMaxLength(100);
 
         // Relationship : InventoryTransaction -> Inventory
         builder.HasOne(it => it.Inventory)
@@ -74,6 +88,6 @@ public class InventoryTransactionConfiguration : IEntityTypeConfiguration<Invent
 
         builder.HasIndex(it => it.TransactionType);
 
-        builder.HasIndex(it => it.CreatedOn);
+        builder.HasIndex(it => it.CreatedOnUtc);
     }
 }

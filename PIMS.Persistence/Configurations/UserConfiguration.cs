@@ -57,15 +57,29 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.IsActive)
                .HasDefaultValue(true);
 
+        // =========================
         // Audit Fields
-        builder.Property(u => u.CreatedOn)
+        // =========================
+
+        builder.Property(u => u.CreatedOnUtc)
                .IsRequired();
 
-        builder.Property(u => u.CreatedBy);
+        builder.Property(u => u.CreatedBy)
+               .IsRequired()
+               .HasMaxLength(100);
 
-        builder.Property(u => u.ModifiedOn);
+        builder.Property(u => u.LastModifiedOnUtc);
 
-        builder.Property(u => u.ModifiedBy);
+        builder.Property(u => u.LastModifiedBy)
+               .HasMaxLength(100);
+
+        builder.Property(u => u.IsDeleted)
+               .HasDefaultValue(false);
+
+        builder.Property(u => u.DeletedOnUtc);
+
+        builder.Property(u => u.DeletedBy)
+               .HasMaxLength(100);
 
         // Relationship : User -> Role
         builder.HasOne(u => u.Role)

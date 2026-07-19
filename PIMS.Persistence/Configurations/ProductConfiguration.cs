@@ -52,15 +52,29 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.IsActive)
                .HasDefaultValue(true);
 
+        // =========================
         // Audit Fields
-        builder.Property(p => p.CreatedOn)
+        // =========================
+
+        builder.Property(p => p.CreatedOnUtc)
                .IsRequired();
 
-        builder.Property(p => p.CreatedBy);
+        builder.Property(p => p.CreatedBy)
+               .IsRequired()
+               .HasMaxLength(100);
 
-        builder.Property(p => p.ModifiedOn);
+        builder.Property(p => p.LastModifiedOnUtc);
 
-        builder.Property(p => p.ModifiedBy);
+        builder.Property(p => p.LastModifiedBy)
+               .HasMaxLength(100);
+
+        builder.Property(p => p.IsDeleted)
+               .HasDefaultValue(false);
+
+        builder.Property(p => p.DeletedOnUtc);
+
+        builder.Property(p => p.DeletedBy)
+               .HasMaxLength(100);
 
         // Relationship : Product -> ProductCategories
         builder.HasMany(p => p.ProductCategories)

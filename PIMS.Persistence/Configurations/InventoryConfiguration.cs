@@ -41,15 +41,29 @@ public class InventoryConfiguration : IEntityTypeConfiguration<Inventory>
         builder.Property(i => i.WarehouseLocation)
                .HasMaxLength(200);
 
+        // =========================
         // Audit Fields
-        builder.Property(i => i.CreatedOn)
+        // =========================
+
+        builder.Property(i => i.CreatedOnUtc)
                .IsRequired();
 
-        builder.Property(i => i.CreatedBy);
+        builder.Property(i => i.CreatedBy)
+               .IsRequired()
+               .HasMaxLength(100);
 
-        builder.Property(i => i.ModifiedOn);
+        builder.Property(i => i.LastModifiedOnUtc);
 
-        builder.Property(i => i.ModifiedBy);
+        builder.Property(i => i.LastModifiedBy)
+               .HasMaxLength(100);
+
+        builder.Property(i => i.IsDeleted)
+               .HasDefaultValue(false);
+
+        builder.Property(i => i.DeletedOnUtc);
+
+        builder.Property(i => i.DeletedBy)
+               .HasMaxLength(100);
 
         // One Product -> One Inventory
         builder.HasOne(i => i.Product)

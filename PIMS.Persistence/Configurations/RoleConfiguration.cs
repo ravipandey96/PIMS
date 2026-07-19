@@ -42,15 +42,29 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
         builder.Property(r => r.IsActive)
                .HasDefaultValue(true);
 
+        // =========================
         // Audit Fields
-        builder.Property(r => r.CreatedOn)
+        // =========================
+
+        builder.Property(r => r.CreatedOnUtc)
                .IsRequired();
 
-        builder.Property(r => r.CreatedBy);
+        builder.Property(r => r.CreatedBy)
+               .IsRequired()
+               .HasMaxLength(100);
 
-        builder.Property(r => r.ModifiedOn);
+        builder.Property(r => r.LastModifiedOnUtc);
 
-        builder.Property(r => r.ModifiedBy);
+        builder.Property(r => r.LastModifiedBy)
+               .HasMaxLength(100);
+
+        builder.Property(r => r.IsDeleted)
+               .HasDefaultValue(false);
+
+        builder.Property(r => r.DeletedOnUtc);
+
+        builder.Property(r => r.DeletedBy)
+               .HasMaxLength(100);
 
         // Relationship
         builder.HasMany(r => r.Users)

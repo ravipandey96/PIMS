@@ -42,15 +42,29 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         builder.Property(c => c.IsActive)
                .HasDefaultValue(true);
 
+        // =========================
         // Audit Fields
-        builder.Property(c => c.CreatedOn)
+        // =========================
+
+        builder.Property(c => c.CreatedOnUtc)
                .IsRequired();
 
-        builder.Property(c => c.CreatedBy);
+        builder.Property(c => c.CreatedBy)
+               .IsRequired()
+               .HasMaxLength(100);
 
-        builder.Property(c => c.ModifiedOn);
+        builder.Property(c => c.LastModifiedOnUtc);
 
-        builder.Property(c => c.ModifiedBy);
+        builder.Property(c => c.LastModifiedBy)
+               .HasMaxLength(100);
+
+        builder.Property(c => c.IsDeleted)
+               .HasDefaultValue(false);
+
+        builder.Property(c => c.DeletedOnUtc);
+
+        builder.Property(c => c.DeletedBy)
+               .HasMaxLength(100);
 
         // Relationship : Category -> ProductCategories
         builder.HasMany(c => c.ProductCategories)
