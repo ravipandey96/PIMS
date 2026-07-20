@@ -1,15 +1,12 @@
-﻿namespace PIMS.Domain.Common;
+﻿using PIMS.Domain.Common;
+
+namespace PIMS.Domain.Common;
 
 /// <summary>
 /// Represents a base entity with audit information.
 /// </summary>
-public abstract class AuditableEntity
+public abstract class AuditableEntity : BaseEntity
 {
-    /// <summary>
-    /// Gets or sets the primary key.
-    /// </summary>
-    public int Id { get; set; }
-
     /// <summary>
     /// Gets or sets when the entity was created (UTC).
     /// </summary>
