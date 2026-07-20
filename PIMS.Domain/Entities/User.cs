@@ -23,6 +23,11 @@ public class User : AuditableEntity
     public string Email { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the user's unique username.
+    /// </summary>
+    public string Username { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the hashed password.
     /// </summary>
     public string PasswordHash { get; set; } = string.Empty;
@@ -50,5 +55,6 @@ public class User : AuditableEntity
     /// <summary>
     /// Navigation property for inventory transactions performed by this user.
     /// </summary>
-    public ICollection<InventoryTransaction> InventoryTransactions { get; set; } = new List<InventoryTransaction>();
+    public ICollection<InventoryTransaction> InventoryTransactions { get; set; }
+        = new List<InventoryTransaction>();
 }
