@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace PIMS.Application.Interfaces.Security;
+namespace PIMS.Application.Interfaces.Authentication;
 
 /// <summary>
 /// Defines methods for generating and validating JSON Web Tokens (JWT).
@@ -14,7 +14,10 @@ public interface IJwtService
     /// <param name="email">The user's email address.</param>
     /// <param name="role">The user's role.</param>
     /// <returns>The generated JWT access token.</returns>
-    string GenerateToken(Guid userId, string email, string role);
+    string GenerateToken(
+        int userId,
+        string email,
+        string role);
 
     /// <summary>
     /// Validates the specified JWT access token.

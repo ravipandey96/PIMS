@@ -1,10 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace PIMS.Application.Common.Exceptions;
 
-namespace PIMS.Application.Common.Exceptions
+/// <summary>
+/// Represents an exception that is thrown when
+/// the requested resource cannot be found.
+/// </summary>
+public sealed class NotFoundException : Exception
 {
-    internal class NotFoundException
+    public NotFoundException()
+    {
+    }
+
+    public NotFoundException(string message)
+        : base(message)
+    {
+    }
+
+    public NotFoundException(
+        string message,
+        Exception innerException)
+        : base(message, innerException)
     {
     }
 }

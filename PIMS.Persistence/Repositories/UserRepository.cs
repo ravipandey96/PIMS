@@ -73,4 +73,17 @@ public class UserRepository : Repository<User>, IUserRepository
             .Where(u => u.IsActive)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<User?> GetByEmailOrUsernameAsync(
+    string emailOrUsername,
+    CancellationToken cancellationToken = default)
+    {
+        return await _context.Users
+            .Include(u => u.Role)
+            .FirstOrDefaultAsync(
+                u =>
+                    u.Email == emailOrUsername ||
+                    u.Username == emailOrUsername,
+                cancellationToken);
+    }
 }

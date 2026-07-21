@@ -57,4 +57,11 @@ public class User : AuditableEntity
     /// </summary>
     public ICollection<InventoryTransaction> InventoryTransactions { get; set; }
         = new List<InventoryTransaction>();
+
+    /// <summary>
+    /// Navigation property for the user's refresh tokens.
+    /// A user can have multiple active sessions (one refresh token per session/device).
+    /// </summary>
+    public ICollection<RefreshToken> RefreshTokens { get; set; }
+        = new List<RefreshToken>();
 }

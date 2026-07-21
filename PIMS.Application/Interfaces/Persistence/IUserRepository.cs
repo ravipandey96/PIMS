@@ -64,4 +64,8 @@ public interface IUserRepository : IRepository<User>
     /// <returns>A collection of active users.</returns>
     Task<IEnumerable<User>> GetActiveUsersAsync(
         CancellationToken cancellationToken = default);
+
+    Task<User?> GetByEmailOrUsernameAsync(
+    string emailOrUsername,
+    CancellationToken cancellationToken = default);
 }

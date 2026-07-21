@@ -1,6 +1,4 @@
-﻿using PIMS.Application.Interfaces.Persistence;
-
-namespace PIMS.Application.Interfaces.Persistence;
+﻿namespace PIMS.Application.Interfaces.Persistence;
 
 /// <summary>
 /// Represents the Unit of Work pattern for coordinating repository operations
@@ -61,4 +59,5 @@ public interface IUnitOfWork : IDisposable
     /// <param name="cancellationToken">Cancellation token.</param>
     Task RollbackTransactionAsync(
         CancellationToken cancellationToken = default);
+    IRefreshTokenRepository RefreshTokens { get; }
 }

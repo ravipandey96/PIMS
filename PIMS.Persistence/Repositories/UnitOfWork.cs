@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using PIMS.Application.Interfaces.Persistence;
 using PIMS.Persistence.Context;
-using PIMS.Persistence.Repositories;
 
-namespace PIMS.Persistence.UnitOfWork1;
+namespace PIMS.Persistence.Repositories;
 
 /// <summary>
 /// Coordinates repository operations and manages database transactions.
@@ -13,7 +12,6 @@ public sealed class UnitOfWork : IUnitOfWork
     private readonly PimsDbContext _context;
 
     private IDbContextTransaction? _transaction;
-
 
     /// <summary>
     /// Initializes a new instance of UnitOfWork.
@@ -30,29 +28,26 @@ public sealed class UnitOfWork : IUnitOfWork
         Products = new ProductRepository(_context);
         Categories = new CategoryRepository(_context);
         Inventories = new InventoryRepository(_context);
+        RefreshTokens = new RefreshTokenRepository(_context);
     }
-
 
     /// <inheritdoc/>
     public IUserRepository Users { get; }
 
-
     /// <inheritdoc/>
     public IRoleRepository Roles { get; }
-
 
     /// <inheritdoc/>
     public IProductRepository Products { get; }
 
-
     /// <inheritdoc/>
     public ICategoryRepository Categories { get; }
-
 
     /// <inheritdoc/>
     public IInventoryRepository Inventories { get; }
 
-
+    /// <inheritdoc/>
+    public IRefreshTokenRepository RefreshTokens { get; }
 
     /// <inheritdoc/>
     public async Task<int> SaveChangesAsync(
@@ -60,8 +55,6 @@ public sealed class UnitOfWork : IUnitOfWork
     {
         return await _context.SaveChangesAsync(cancellationToken);
     }
-
-
 
     /// <inheritdoc/>
     public async Task BeginTransactionAsync(
@@ -77,8 +70,6 @@ public sealed class UnitOfWork : IUnitOfWork
                 cancellationToken);
     }
 
-
-
     /// <inheritdoc/>
     public async Task CommitTransactionAsync(
         CancellationToken cancellationToken = default)
@@ -88,18 +79,15 @@ public sealed class UnitOfWork : IUnitOfWork
             return;
         }
 
-
         try
         {
             await _context.SaveChangesAsync(cancellationToken);
 
-            await _transaction.CommitAsync(
-                cancellationToken);
+            await _transaction.CommitAsync(cancellationToken);
         }
         catch
         {
-            await _transaction.RollbackAsync(
-                cancellationToken);
+            await _transaction.RollbackAsync(cancellationToken);
 
             throw;
         }
@@ -111,8 +99,6 @@ public sealed class UnitOfWork : IUnitOfWork
         }
     }
 
-
-
     /// <inheritdoc/>
     public async Task RollbackTransactionAsync(
         CancellationToken cancellationToken = default)
@@ -122,11 +108,9 @@ public sealed class UnitOfWork : IUnitOfWork
             return;
         }
 
-
         try
         {
-            await _transaction.RollbackAsync(
-                cancellationToken);
+            await _transaction.RollbackAsync(cancellationToken);
         }
         finally
         {
@@ -135,8 +119,6 @@ public sealed class UnitOfWork : IUnitOfWork
             _transaction = null;
         }
     }
-
-
 
     /// <summary>
     /// Releases database resources.

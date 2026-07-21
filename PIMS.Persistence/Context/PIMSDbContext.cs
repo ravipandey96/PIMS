@@ -52,6 +52,7 @@ public class PimsDbContext : DbContext
     /// Gets or sets the InventoryTransactions table.
     /// </summary>
     public DbSet<InventoryTransaction> InventoryTransactions => Set<InventoryTransaction>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     /// <summary>
     /// Configures the entity model.

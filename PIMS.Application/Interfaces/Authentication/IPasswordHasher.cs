@@ -1,4 +1,4 @@
-﻿namespace PIMS.Application.Interfaces.Security;
+﻿namespace PIMS.Application.Interfaces.Authentication;
 
 /// <summary>
 /// Defines methods for hashing and verifying user passwords.
