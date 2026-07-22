@@ -1,16 +1,12 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using PIMS.Infrastructure.Configurations;
-using PIMS.Persistence.Context;
 using PIMS.API.Middleware;
+using PIMS.Application.DependencyInjection;
+using PIMS.Infrastructure.DependencyInjection;
+using PIMS.Persistence.Context;
+using PIMS.Persistence.DependencyInjection;
 using PIMS.Persistence.Seed;
-using System.Text;
-
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 // =================================
 // Add Controllers
@@ -18,143 +14,48 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-
-
 // =================================
-// Swagger
+// Application Layer
 // =================================
 
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddSwaggerGen();
-
-
+builder.Services.AddApplication();
 
 // =================================
-// Database Configuration
+// Infrastructure Layer
 // =================================
 
-builder.Services.AddDbContext<PimsDbContext>(options =>
-{
-    options.UseMySql(
-        builder.Configuration
-            .GetConnectionString("DefaultConnection"),
-
-        ServerVersion.AutoDetect(
-            builder.Configuration
-                .GetConnectionString("DefaultConnection"))
-    );
-});
-
-
+builder.Services.AddInfrastructure(
+    builder.Configuration);
 
 // =================================
-// JWT Configuration
+// Persistence Layer
 // =================================
 
-builder.Services.Configure<JwtOptions>(
-    builder.Configuration
-        .GetSection(JwtOptions.SectionName));
-
-
+builder.Services.AddPersistence(
+    builder.Configuration);
 
 // =================================
-// JWT Authentication
+// Build Application
 // =================================
-
-builder.Services
-    .AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme =
-            JwtBearerDefaults.AuthenticationScheme;
-
-
-        options.DefaultChallengeScheme =
-            JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters =
-            new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-
-
-                IssuerSigningKey =
-                    new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(
-                            builder.Configuration
-                                .GetSection("Jwt")["Key"]!
-                        )
-                    ),
-
-
-                ValidateIssuer = true,
-
-
-                ValidIssuer =
-                    builder.Configuration
-                        .GetSection("Jwt")["Issuer"],
-
-
-                ValidateAudience = true,
-
-
-                ValidAudience =
-                    builder.Configuration
-                        .GetSection("Jwt")["Audience"],
-
-
-                ValidateLifetime = true,
-
-
-                ClockSkew =
-                    TimeSpan.Zero
-            };
-    });
-
-
-
-// =================================
-// Application Services
-// =================================
-
-// Uncomment after creating extension method
-
-// builder.Services.AddApplication();
-
-
-
-// =================================
-// Infrastructure Services
-// =================================
-
-// Uncomment after creating extension method
-
-// builder.Services.AddInfrastructure(
-//     builder.Configuration);
-
-
 
 var app = builder.Build();
-
-
 
 // =================================
 // Database Seeder
 // =================================
 
-using (var scope = app.Services.CreateScope())
+using (IServiceScope scope = app.Services.CreateScope())
 {
-    var context =
+    PimsDbContext context =
         scope.ServiceProvider
             .GetRequiredService<PimsDbContext>();
 
+    // Apply pending migrations automatically
+    await context.Database.MigrateAsync();
 
+    // Seed default data
     await DatabaseSeeder.SeedAsync(context);
 }
-
-
 
 // =================================
 // HTTP Pipeline
@@ -164,24 +65,37 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
 
-    app.UseSwaggerUI();
-}
+    app.UseSwaggerUI(options =>
+    {
+        options.DisplayRequestDuration();
 
+        options.EnablePersistAuthorization();
+    });
+}
 
 app.UseHttpsRedirection();
 
+// =================================
+// Custom Middleware
+// =================================
 
 app.UseGlobalExceptionHandling();
-// IMPORTANT ORDER
+
+// Uncomment after RequestLoggingMiddleware is implemented
+// app.UseRequestLogging();
+
+// =================================
+// Authentication & Authorization
+// =================================
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-
+// =================================
+// Endpoints
+// =================================
 
 app.MapControllers();
-
-
 
 app.Run();

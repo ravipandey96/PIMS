@@ -1,7 +1,7 @@
 ﻿namespace PIMS.Application.Common.Models;
 
 /// <summary>
-/// Represents a standardized successful API response.
+/// Represents a standardized API response.
 /// </summary>
 /// <typeparam name="T">
 /// Type of returned data.
@@ -29,8 +29,9 @@ public sealed class ApiResponse<T>
     public DateTime TimestampUtc { get; init; }
         = DateTime.UtcNow;
 
-
-
+    /// <summary>
+    /// Creates a successful response.
+    /// </summary>
     public static ApiResponse<T> Ok(
         T data,
         string message = "Request completed successfully.")
@@ -40,6 +41,35 @@ public sealed class ApiResponse<T>
             Success = true,
             Message = message,
             Data = data
+        };
+    }
+
+    /// <summary>
+    /// Creates a response for a newly created resource.
+    /// </summary>
+    public static ApiResponse<T> Created(
+        T data,
+        string message = "Resource created successfully.")
+    {
+        return new ApiResponse<T>
+        {
+            Success = true,
+            Message = message,
+            Data = data
+        };
+    }
+
+    /// <summary>
+    /// Creates a failed response.
+    /// </summary>
+    public static ApiResponse<T> Failure(
+        string message)
+    {
+        return new ApiResponse<T>
+        {
+            Success = false,
+            Message = message,
+            Data = default
         };
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PIMS.Application.Interfaces.Services;
 using PIMS.Application.Services;
+
 namespace PIMS.Application.DependencyInjection;
 
 /// <summary>
@@ -13,23 +14,36 @@ public static class DependencyInjection
     /// Registers application layer services.
     /// </summary>
     /// <param name="services">
-    /// The service collection.
+    /// Service collection.
     /// </param>
     /// <returns>
-    /// The updated service collection.
+    /// Updated service collection.
     /// </returns>
     public static IServiceCollection AddApplication(
         this IServiceCollection services)
     {
-        // =====================================================
-        // Register Application Services here
-        //
-        // Examples:
-        // - MediatR (Future)
-        // - FluentValidation (Future)
-        // - AutoMapper (Future)
-        // =====================================================
+        // ============================================
+        // Business Services
+        // ============================================
+
         services.AddScoped<ICategoryService, CategoryService>();
+
+        // ============================================
+        // Future Registrations
+        // ============================================
+
+        // services.AddScoped<IProductService, ProductService>();
+        // services.AddScoped<IInventoryService, InventoryService>();
+        // services.AddScoped<IUserService, UserService>();
+
+        // ============================================
+        // Future Libraries
+        // ============================================
+
+        // services.AddAutoMapper(...);
+        // services.AddMediatR(...);
+        // services.AddValidatorsFromAssembly(...);
+
         return services;
     }
 }
