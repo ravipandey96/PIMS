@@ -10,7 +10,8 @@ using PIMS.Infrastructure.Configurations;
 namespace PIMS.Infrastructure.DependencyInjection;
 
 /// <summary>
-/// Provides extension methods for registering infrastructure services.
+/// Provides extension methods for registering
+/// infrastructure layer services.
 /// </summary>
 public static class DependencyInjection
 {
@@ -31,24 +32,34 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         // =========================================================
-        // JWT Configuration
+        // JWT Options
         // =========================================================
 
         services.Configure<JwtOptions>(
-            configuration.GetSection("Jwt"));
+            configuration.GetSection(JwtOptions.SectionName));
 
         var jwtOptions =
-            configuration.GetSection("Jwt")
-                         .Get<JwtOptions>()
+            configuration
+                .GetSection(JwtOptions.SectionName)
+                .Get<JwtOptions>()
             ?? throw new InvalidOperationException(
                 "JWT configuration is missing.");
+
+
 
         // =========================================================
         // Authentication
         // =========================================================
 
         services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme =
+                    JwtBearerDefaults.AuthenticationScheme;
+
+                options.DefaultChallengeScheme =
+                    JwtBearerDefaults.AuthenticationScheme;
+            })
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
@@ -59,21 +70,48 @@ public static class DependencyInjection
                     new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = jwtOptions.Issuer,
+
+                        ValidIssuer =
+                            jwtOptions.Issuer,
 
                         ValidateAudience = true,
-                        ValidAudience = jwtOptions.Audience,
+
+                        ValidAudience =
+                            jwtOptions.Audience,
 
                         ValidateIssuerSigningKey = true,
+
                         IssuerSigningKey =
                             new SymmetricSecurityKey(
-                                Encoding.UTF8.GetBytes(jwtOptions.Key)),
+                                Encoding.UTF8.GetBytes(
+                                    jwtOptions.Key)),
 
                         ValidateLifetime = true,
 
-                        ClockSkew = TimeSpan.Zero
+                        ClockSkew =
+                            TimeSpan.Zero
                     };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        return Task.CompletedTask;
+                    },
+
+                    OnTokenValidated = context =>
+                    {
+                        return Task.CompletedTask;
+                    },
+
+                    OnChallenge = context =>
+                    {
+                        return Task.CompletedTask;
+                    }
+                };
             });
+
+
 
         // =========================================================
         // Authorization
@@ -81,24 +119,28 @@ public static class DependencyInjection
 
         services.AddAuthorization();
 
+
+
         // =========================================================
         // Security Services
         // =========================================================
 
         services.AddScoped<IJwtService, JwtService>();
 
-        services.AddScoped<IRefreshTokenService,
-            RefreshTokenService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
-        services.AddScoped<IPasswordHasher,
-            PasswordHasher>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+
 
         // =========================================================
-        // Application Services
+        // Authentication Services
         // =========================================================
 
-        /*services.AddScoped<IAuthenticationService,
-            AuthenticationService>();*/
+        services.AddScoped<IAuthenticationService,
+            AuthenticationService>();
+
+
 
         return services;
     }

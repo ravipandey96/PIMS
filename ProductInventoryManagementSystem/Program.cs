@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PIMS.Infrastructure.Configurations;
 using PIMS.Persistence.Context;
+using PIMS.API.Middleware;
 using PIMS.Persistence.Seed;
 using System.Text;
 
@@ -170,7 +171,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-
+app.UseGlobalExceptionHandling();
 // IMPORTANT ORDER
 
 app.UseAuthentication();

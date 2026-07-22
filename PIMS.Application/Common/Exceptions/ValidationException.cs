@@ -6,19 +6,22 @@
 /// </summary>
 public sealed class ValidationException : Exception
 {
-    public ValidationException()
-    {
-    }
-
-    public ValidationException(string message)
+    public ValidationException(
+        string message)
         : base(message)
     {
     }
 
     public ValidationException(
-        string message,
-        Exception innerException)
-        : base(message, innerException)
+        IEnumerable<string> errors)
+        : base("One or more validation errors occurred.")
     {
+        Errors = errors.ToList();
     }
+
+    /// <summary>
+    /// Gets the validation errors.
+    /// </summary>
+    public IReadOnlyCollection<string> Errors { get; } =
+        Array.Empty<string>();
 }
