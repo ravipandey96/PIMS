@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-
+using PIMS.Application.Interfaces.Services;
+using PIMS.Application.Services;
 namespace PIMS.Application.DependencyInjection;
 
 /// <summary>
@@ -28,7 +29,7 @@ public static class DependencyInjection
         // - FluentValidation (Future)
         // - AutoMapper (Future)
         // =====================================================
-
+        services.AddScoped<ICategoryService, CategoryService>();
         return services;
     }
 }
